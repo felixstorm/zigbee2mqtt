@@ -1,18 +1,26 @@
 homeassistant: false
 permit_join: true
 mqtt:
-  base_topic: zigbee2mqtt
-  server: 'mqtt://localhost'
+  base_topic: zigbee2mqtt-dev
+  server: 'mqtt://dietpi'
+  user: zigbee2mqtt
+  password: KkVQXLatSeRwo7r4HEvL
 serial:
-  port: /dev/tty.usbmodem14201
+  port: COM10
 advanced:
-  channel: 18
-  last_seen: disable
   log_level: debug
 devices:
-  '0x90fd9ffffe4b64ae':
-    friendly_name: '0x90fd9ffffe4b64ae'
+  '0x001fee000000240d':
+    friendly_name: studio_dg_rechts
+  '0x001fee0000001b93':
+    friendly_name: test_c4
     retain: false
-  '0x00158d00018255df':
-    friendly_name: '0x00158d00018255df'
+  '0x0017880102314d75':
+    friendly_name: test_hue
+    retain: false
+  '0x0013a2004197d5e2':
+    friendly_name: '0x0013a2004197d5e2'
+    retain: false
+  '0x0013a2004154b776':
+    friendly_name: '0x0013a2004154b776'
     retain: false
