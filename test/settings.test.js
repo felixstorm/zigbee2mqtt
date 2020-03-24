@@ -434,6 +434,31 @@ describe('Settings', () => {
         expect(settings.get().groups).toStrictEqual(expected);
     });
 
+    it('Should crash when removing device from group when group has no devices', () => {
+        write(configurationFile, {
+            devices: {
+                '0x123': {
+                    friendly_name: 'bulb',
+                    retain: true,
+                }
+            },
+            groups: {
+                '1': {
+                    friendly_name: 'test123',
+                }
+            }
+        });
+
+        settings.removeDeviceFromGroup('test123', ['0x123']);
+        const expected = {
+            '1': {
+                friendly_name: 'test123',
+            },
+        };
+
+        expect(settings.get().groups).toStrictEqual(expected);
+    });
+
     it('Should throw when adding device to non-existing group', () => {
         write(configurationFile, {
             devices: {
@@ -534,6 +559,18 @@ describe('Settings', () => {
         expect(() => {
             settings.validate();
         }).toThrowError(`Friendly name cannot end with a "/DIGIT" ('myname/123')`);
+    });
+
+    it('Configuration shouldnt be valid when friendly_name contains a MQTT wildcard', async () => {
+        write(configurationFile, {
+            devices: {'0x0017880104e45519': {friendly_name: 'myname#', retain: false}},
+        });
+
+        settings._reRead();
+
+        expect(() => {
+            settings.validate();
+        }).toThrowError(`MQTT wildcard (+ and #) not allowed in friendly_name ('myname#')`);
     });
 
     it('Configuration shouldnt be valid when friendly_name is a postfix', async () => {
